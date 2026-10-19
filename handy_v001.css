@@ -1,0 +1,282 @@
+/*
+ * handy_v001.css – Finanzapp Handy
+ * Ergänzt die unveränderte Optik der WebApp (webapp_v014.css) nur um das
+ * Handy-Gerüst: Kopfleiste, Tab-Leiste unten, Liste als Zeilen statt Tabelle,
+ * Toast-Meldung. Farben und Bausteine kommen aus der WebApp.
+ */
+
+/* Feste Schriftgröße: Eingabefelder < 16px lassen das iPhone beim Antippen hineinzoomen */
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+body.handy {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-bottom: calc(4.4rem + env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+}
+
+button, .btn-knopf, .tab, .icon-knopf, label { touch-action: manipulation; }
+
+/* ------------------------------------------------------------ Kopfleiste */
+.kopfleiste {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: calc(0.7rem + env(safe-area-inset-top)) calc(1rem + env(safe-area-inset-right)) 0.7rem calc(1rem + env(safe-area-inset-left));
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border);
+}
+.kopf-titel { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.02em; }
+.kopf-zusatz {
+    margin-left: 0.35rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    vertical-align: middle;
+}
+.kopf-zaehler {
+    font-size: 0.8rem;
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.16);
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    white-space: nowrap;
+}
+.kopf-zaehler:hover { color: var(--text); }
+
+/* ------------------------------------------------------------ Inhalt */
+.handy-inhalt {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 1rem calc(1rem + env(safe-area-inset-right)) 1rem calc(1rem + env(safe-area-inset-left));
+}
+.handy-inhalt .card { padding: 1.1rem; margin-bottom: 1rem; }
+.handy-h1 { font-size: 1.4rem; margin: 0.2rem 0 1rem 0; }
+.handy-fusszeile { text-align: center; font-size: 0.8rem; margin: 0.5rem 0 1rem 0; }
+
+/* Banner (Speicher, Update, Installieren) */
+.banner-bereich { max-width: 40rem; margin: 0 auto; padding: 0 1rem; }
+.banner-bereich:empty { display: none; }
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.9rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius);
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    font-size: 0.9rem;
+}
+.banner strong { display: block; margin-bottom: 0.15rem; }
+.banner-text { display: block; color: var(--text-muted); font-size: 0.84rem; line-height: 1.4; }
+.banner-knoepfe { display: flex; gap: 0.5rem; align-items: center; flex: 0 0 auto; }
+.banner-warnung { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.45); color: #fca5a5; }
+
+/* ------------------------------------------------------------ Formular */
+.handy-form { display: block; }
+.handy-form .form-row { margin-bottom: 0.95rem; }
+.handy-form input[type="text"],
+.handy-form input[type="date"],
+.handy-form input[type="search"] {
+    width: 100%;
+    min-height: 2.75rem;
+    font: inherit;
+    font-size: 1rem;
+    -webkit-appearance: none;
+    appearance: none;
+}
+/* iOS: Datumsfeld sonst ohne Höhe und linksbündig verrutscht */
+.handy-form input[type="date"] { display: block; text-align: left; line-height: 1.6; }
+.handy-form input[type="date"]::-webkit-date-and-time-value { text-align: left; }
+.handy-form input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.handy-form input.ist-fehler { border-color: var(--ausgaben); }
+.feld-fehler { color: #fca5a5; font-size: 0.82rem; margin-top: 0.3rem; }
+
+.handy-form .typ-schalter { max-width: none; flex-wrap: nowrap; }
+.handy-form .typ-schalter label { padding: 0.65rem 0.3rem; font-size: 0.95rem; }
+.handy-form .rueckfluss-wahl { max-width: none; margin-top: 0.5rem; }
+.handy-form .rueckfluss-wahl label { padding: 0.5rem 0.4rem; font-size: 0.88rem; }
+.handy-form .schalter { min-height: 2.6rem; }
+
+.form-knoepfe { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
+.handy-form .form-knoepfe button { margin-top: 0; flex: 1 1 10rem; min-height: 2.9rem; font-size: 1.02rem; font-weight: 600; }
+.handy-form .form-knoepfe .btn-grau { background: var(--bg-input); color: var(--text); border: 1px solid var(--border); }
+
+/* ------------------------------------------------------------ Kennzahlen */
+.handy-zahlen { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; margin-bottom: 1rem; }
+.handy-zahlen .kennzahl { padding: 0.7rem 0.8rem; }
+.handy-zahlen .kennzahl-titel { font-size: 0.68rem; }
+.handy-zahlen .kennzahl-wert { font-size: 1.12rem; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------ Liste */
+.handy-suche {
+    width: 100%;
+    min-height: 2.6rem;
+    margin: 0 0 0.6rem 0;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+}
+.handy-liste { list-style: none; margin: 0; padding: 0; }
+.handy-zeile {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.handy-zeile:last-child { border-bottom: none; }
+.zeile-text { min-width: 0; flex: 1 1 auto; }
+.zeile-oben { display: flex; align-items: center; gap: 0.4rem; }
+.zeile-datum { font-size: 0.8rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.zeile-name { font-weight: 600; margin-top: 0.1rem; overflow-wrap: anywhere; }
+.zeile-zusatz { font-size: 0.84rem; margin-top: 0.1rem; overflow-wrap: anywhere; }
+.zeile-rechts { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; flex: 0 0 auto; }
+.zeile-betrag { font-weight: 700; white-space: nowrap; }
+.zeile-knoepfe { display: flex; gap: 0.4rem; }
+.zeile-knoepfe .icon-knopf { width: 2.4rem; height: 2.4rem; font-size: 1rem; }
+.badge-steuer {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.02rem 0.4rem;
+    border-radius: 999px;
+    color: #bfdbfe;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+}
+.handy-liste-nichts { padding: 0.75rem 0; }
+.leer-zustand { text-align: center; padding: 1rem 0 0.4rem 0; }
+.leer-zustand p { color: var(--text-muted); margin: 0 0 0.9rem 0; }
+
+/* ------------------------------------------------------------ Export */
+.export-text { margin: 0 0 1rem 0; line-height: 1.5; }
+.knopf-spalte { display: flex; flex-direction: column; gap: 0.6rem; }
+.knopf-spalte .btn-knopf { width: 100%; min-height: 2.9rem; font-weight: 600; text-align: center; }
+.knopf-spalte .btn-knopf:disabled { opacity: 0.45; cursor: not-allowed; }
+.knopf-spalte .btn-knopf.btn-grau { font-weight: 500; }
+.export-liste { list-style: none; margin: 0.6rem 0 0 0; padding: 0; }
+.export-zeile { padding: 0.75rem 0; border-top: 1px solid var(--border); }
+.export-zeit { font-weight: 600; }
+.export-zeile .leise { font-size: 0.84rem; margin-top: 0.15rem; }
+.export-knoepfe { display: flex; gap: 0.5rem; margin-top: 0.55rem; flex-wrap: wrap; }
+.export-knoepfe .btn-knopf { flex: 1 1 8rem; text-align: center; min-height: 2.4rem; }
+.schritt-liste { padding-left: 1.25rem; margin: 0.4rem 0 0.8rem 0; line-height: 1.55; font-size: 0.93rem; }
+.schritt-liste li { margin-bottom: 0.35rem; }
+
+/* ------------------------------------------------------------ Hilfe */
+.handy-inhalt .hilfe-thema { margin-bottom: 0.7rem; }
+.handy-inhalt .hilfe-inhalt { padding: 0 1rem 1rem 1rem; }
+.handy-inhalt .hilfe-inhalt p:first-child { margin-top: 0; }
+.handy-inhalt code { background: var(--bg-input); padding: 0.05rem 0.3rem; border-radius: 4px; }
+
+/* ------------------------------------------------------------ Tab-Leiste unten */
+.tab-leiste {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0.35rem calc(0.4rem + env(safe-area-inset-right)) calc(0.35rem + env(safe-area-inset-bottom)) calc(0.4rem + env(safe-area-inset-left));
+    background: var(--bg-sidebar);
+    border-top: 1px solid var(--border);
+}
+.tab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.35rem 0.2rem;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.tab svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.tab:hover { color: var(--text); }
+.tab.ist-aktiv { color: #fff; background: rgba(59, 130, 246, 0.18); }
+.tab.ist-aktiv svg { stroke: var(--accent); }
+.tab-zahl {
+    position: absolute;
+    top: 0.1rem;
+    left: calc(50% + 0.45rem);
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.68rem;
+    line-height: 1.15rem;
+    text-align: center;
+}
+
+/* ------------------------------------------------------------ Toast */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 40;
+    width: min(calc(100% - 2rem), 36rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius);
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 0.92rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+.toast-knopf {
+    flex: 0 0 auto;
+    background: none;
+    border: none;
+    color: var(--accent-hover);
+    font: inherit;
+    font-weight: 700;
+    padding: 0.35rem 0.4rem;
+    cursor: pointer;
+}
+
+/* Sehr schmale Handys (z. B. 320 px): Art-Knöpfe etwas kompakter, damit „Investment“ passt */
+@media (max-width: 360px) {
+    .handy-form .typ-schalter { gap: 0.35rem; }
+    .handy-form .typ-schalter label { font-size: 0.84rem; padding: 0.65rem 0.1rem; }
+    .handy-inhalt .card { padding: 0.95rem; }
+}
+
+/* Breite Bildschirme (Tablet/PC): Tab-Leiste mittig begrenzen */
+@media (min-width: 700px) {
+    .tab-leiste { grid-template-columns: repeat(4, 7rem); justify-content: center; }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Finanzen Handy</title>
+    <meta name="description" content="Einnahmen, Ausgaben und Investments unterwegs erfassen und als Excel in die Finanz-App übernehmen.">
+    <meta name="theme-color" content="#0b1120">
+    <meta name="color-scheme" content="dark">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Finanzen">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Optik 1:1 aus der WebApp (style.css aus Version 14), dazu nur das Handy-Gerüst -->
+    <link rel="stylesheet" href="webapp_v014.css">
+    <link rel="stylesheet" href="handy_v001.css">
+</head>
+<body class="handy">
+
+<header class="kopfleiste">
+    <span class="kopf-titel">Finanzen <span class="kopf-zusatz">Handy</span></span>
+    <a class="kopf-zaehler" href="#liste" data-zaehler hidden></a>
+</header>
+
+<div class="banner-bereich">
+    <div class="banner banner-warnung" data-speicher-warnung hidden>
+        Speichern ist hier nicht möglich (privater Modus?). Einträge gehen beim Schließen verloren.
+    </div>
+    <div class="banner" data-update hidden>
+        <span>Eine neue Version ist da.</span>
+        <button type="button" class="btn-knopf btn-klein" data-update-knopf>Jetzt aktualisieren</button>
+    </div>
+    <div class="banner" data-installieren hidden>
+        <div>
+            <strong>Als App installieren</strong>
+            <span class="banner-text" data-installieren-text></span>
+        </div>
+        <div class="banner-knoepfe">
+            <button type="button" class="btn-knopf btn-klein" data-installieren-knopf hidden>Installieren</button>
+            <button type="button" class="icon-knopf" data-installieren-zu aria-label="Hinweis schließen" title="Ausblenden">✕</button>
+        </div>
+    </div>
+</div>
+
+<main class="handy-inhalt">
+
+    <!-- ============================================================ Neu / Bearbeiten -->
+    <section data-ansicht="neu" aria-labelledby="form-titel">
+        <div class="card">
+            <h2 id="form-titel" data-form-titel>Neuer Eintrag</h2>
+            <form class="entry-form handy-form" data-formular novalidate autocomplete="off">
+                <div class="form-row">
+                    <label for="beschreibung">Name</label>
+                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf (optional)" enterkeyhint="next">
+                </div>
+                <div class="form-row">
+                    <label for="datum">Datum</label>
+                    <input type="date" id="datum" name="datum" required>
+                    <span class="feld-fehler" data-fehler="datum" hidden></span>
+                </div>
+                <div class="form-row form-row-art" data-art-feld>
+                    <span class="feld-label" id="typ-label">Art</span>
+                    <div class="typ-schalter" role="radiogroup" aria-labelledby="typ-label">
+                        <input type="radio" id="typ-einnahme" name="typ" value="Einnahme">
+                        <label for="typ-einnahme" class="typ-einnahme">Einnahme</label>
+                        <input type="radio" id="typ-ausgabe" name="typ" value="Ausgabe" checked>
+                        <label for="typ-ausgabe" class="typ-ausgabe">Ausgabe</label>
+                        <input type="radio" id="typ-investment" name="typ" value="Investment">
+                        <label for="typ-investment" class="typ-investment">Investment</label>
+                    </div>
+                    <div class="wahl-schalter klein rueckfluss-wahl" role="radiogroup" aria-label="Investment" data-rueckfluss hidden>
+                        <input type="radio" id="rueck-nein" name="rueckfluss" value="" checked>
+                        <label for="rueck-nein">Geld angelegt</label>
+                        <input type="radio" id="rueck-ja" name="rueckfluss" value="ja">
+                        <label for="rueck-ja">Geld zurück</label>
+                    </div>
+                    <span class="feld-hinweis" data-rueckfluss hidden>
+                        Investiertes Geld ist weder ausgegeben noch frei verfügbar. „Geld zurück“ (z. B. Aktien verkauft) verringert es wieder.
+                    </span>
+                </div>
+                <div class="form-row">
+                    <label for="betrag">Betrag (€)</label>
+                    <input type="text" id="betrag" name="betrag" placeholder="z. B. 49,99" inputmode="decimal" required enterkeyhint="next">
+                    <span class="feld-fehler" data-fehler="betrag" hidden></span>
+                </div>
+                <div class="form-row">
+                    <label for="kategorie">Kategorie <span class="optional">(optional)</span></label>
+                    <input type="text" id="kategorie" name="kategorie" list="kategorien-liste" placeholder="z. B. Lebensmittel" enterkeyhint="next">
+                    <datalist id="kategorien-liste"></datalist>
+                </div>
+                <div class="form-row">
+                    <label for="gruppe">Kategoriegruppe <span class="optional">(optional)</span></label>
+                    <input type="text" id="gruppe" name="gruppe" list="gruppen-liste" placeholder="z. B. Alltag" enterkeyhint="done">
+                    <datalist id="gruppen-liste"></datalist>
+                    <span class="feld-hinweis" data-gruppe-hinweis>
+                        Gehört die Kategorie in der WebApp schon zu einer Gruppe, gilt beim Einlesen diese.
+                    </span>
+                </div>
+                <div class="form-row">
+                    <span class="feld-label" id="steuer-label">Steuerrelevant</span>
+                    <input type="checkbox" id="steuerrelevant" name="steuerrelevant" value="ja" class="schalter-feld" aria-labelledby="steuer-label">
+                    <button type="button" class="schalter" data-schalter="steuerrelevant" role="switch" aria-checked="false" aria-labelledby="steuer-label">
+                        <span class="schalter-laufbahn"><span class="schalter-knopf"></span></span>
+                        <span class="schalter-text"><span class="schalter-aus">Nein</span><span class="schalter-an">Ja, steuerrelevant</span></span>
+                    </button>
+                </div>
+                <div class="form-knoepfe">
+                    <button type="submit" class="btn-knopf" data-speichern-knopf>Hinzufügen</button>
+                    <button type="button" class="btn-knopf btn-grau" data-abbrechen hidden>Abbrechen</button>
+                </div>
+            </form>
+        </div>
+        <p class="hinweis handy-fusszeile" data-neu-hinweis></p>
+    </section>
+
+    <!-- ============================================================ Liste -->
+    <section data-ansicht="liste" hidden aria-labelledby="liste-titel">
+        <div class="kennzahlen handy-zahlen" data-kennzahlen></div>
+        <div class="card">
+            <div class="karten-kopf">
+                <h2 id="liste-titel">Auf dem Handy</h2>
+                <span class="karten-kopf-zusatz" data-liste-zusatz></span>
+            </div>
+            <input type="search" class="handy-suche" placeholder="Suchen in Name, Kategorie, Betrag …" aria-label="Einträge durchsuchen" data-suche hidden>
+            <ul class="handy-liste" data-liste></ul>
+            <div class="leer-zustand" data-leer hidden>
+                <p>Noch keine Einträge auf dem Handy.</p>
+                <a class="btn-knopf" href="#neu">Neuer Eintrag</a>
+            </div>
+        </div>
+        <p class="hinweis handy-fusszeile">Die Einträge bleiben auf dem Handy, bis du sie unter „Export“ als Excel-Datei exportierst.</p>
+    </section>
+
+    <!-- ============================================================ Export -->
+    <section data-ansicht="export" hidden aria-labelledby="export-titel">
+        <div class="card">
+            <h2 id="export-titel">Excel exportieren</h2>
+            <p class="export-text" data-export-text></p>
+            <div class="knopf-spalte">
+                <button type="button" class="btn-knopf" data-export="teilen" hidden>Excel senden / speichern …</button>
+                <button type="button" class="btn-knopf" data-export="laden">Excel herunterladen</button>
+            </div>
+            <p class="feld-hinweis" data-export-hinweis></p>
+        </div>
+
+        <div class="card" data-exporte-karte hidden>
+            <h2>Letzte Exporte</h2>
+            <p class="hinweis">Falls etwas schiefgegangen ist: Datei nochmal speichern oder die Einträge zurück in die Liste holen. Die letzten 5 Exporte bleiben hier.</p>
+            <ul class="export-liste" data-exporte></ul>
+        </div>
+
+        <div class="card">
+            <h2>So kommt die Datei in die WebApp</h2>
+            <ol class="schritt-liste">
+                <li>Die Excel-Datei auf den PC bringen – z. B. per Mail an dich selbst, über eine Cloud oder per Kabel.</li>
+                <li>Die Finanz-App am PC öffnen und oben im Menü auf <strong>„Komplex“</strong> stellen.</li>
+                <li><strong>„Eintragen“</strong> → <strong>„Mehrere Einträge aus einer Excel-Datei“</strong> aufklappen.</li>
+                <li>Die Datei bei „Hochladen“ hineinziehen oder auswählen → <strong>„Hochladen und einpflegen“</strong>.</li>
+            </ol>
+            <p class="hinweis">Liest du dieselbe Datei aus Versehen zweimal ein, zeigt die WebApp die Einträge als „mögliche Dublette“ an und pflegt sie nicht ungefragt ein.</p>
+        </div>
+    </section>
+
+    <!-- ============================================================ Hilfe -->
+    <section data-ansicht="hilfe" hidden aria-labelledby="hilfe-titel">
+        <h1 id="hilfe-titel" class="handy-h1">Anleitung</h1>
+
+        <details class="hilfe-thema" open>
+            <summary><span class="hilfe-thema-titel">Wofür ist diese App?</span></summary>
+            <div class="hilfe-inhalt">
+                <p>Unterwegs schnell Einnahmen, Ausgaben und Investments notieren. Später exportierst du alles als Excel-Datei
+                    und liest sie in die Finanz-App am PC ein. Danach sind die Einträge vom Handy verschwunden – die App ist
+                    also nur ein „Zwischenspeicher“.</p>
+            </div>
+        </details>
+
+        <details class="hilfe-thema">
+            <summary><span class="hilfe-thema-titel">Eintragen</span></summary>
+            <div class="hilfe-inhalt">
+                <ol>
+                    <li>Unten auf <strong>„Neu“</strong> tippen.</li>
+                    <li>Datum steht schon auf heute. Art wählen: Einnahme, Ausgabe oder Investment
+                        (bei Investment zusätzlich „Geld angelegt“ oder „Geld zurück“).</li>
+                    <li>Betrag eintippen, z. B. <code>49,99</code>. Name, Kategorie und Gruppe sind freiwillig.</li>
+                    <li><strong>„Hinzufügen“</strong> – fertig.</li>
+                </ol>
+                <p class="hilfe-tipp">💡 Kategorien und Gruppen, die du schon einmal benutzt hast, werden beim Tippen vorgeschlagen.
+                    Hast du zu einer Kategorie früher eine Gruppe angegeben, wird sie automatisch eingetragen.</p>
+            </div>
+        </details>
+
+        <details class="hilfe-thema">
+            <summary><span class="hilfe-thema-titel">Bearbeiten und löschen</span></summary>
+            <div class="hilfe-inhalt">
+                <p>Unter <strong>„Liste“</strong> stehen alle Einträge, die noch auf dem Handy sind.
+                    Mit ✎ bearbeitest du einen Eintrag, mit 🗑 löschst du ihn. Direkt nach dem Löschen kannst du es
+                    unten mit <strong>„Rückgängig“</strong> zurücknehmen.</p>
+            </div>
+        </details>
+
+        <details class="hilfe-thema">
+            <summary><span class="hilfe-thema-titel">Exportieren und in die WebApp einlesen</span></summary>
+            <div class="hilfe-inhalt">
+                <ol>
+                    <li>Unten auf <strong>„Export“</strong> tippen.</li>
+                    <li><strong>iPhone:</strong> „Excel senden / speichern …“ – dann z. B. „In Dateien sichern“, Mail oder Messenger.<br>
+                        <strong>Android:</strong> „Excel herunterladen“ – die Datei liegt dann im Ordner „Downloads“.</li>
+                    <li>Die Einträge verschwinden danach von der Liste. Unter „Letzte Exporte“ kannst du die Datei nochmal speichern
+                        oder die Einträge zurückholen.</li>
+                    <li>Am PC: Finanz-App im Modus „Komplex“ → „Eintragen“ → „Mehrere Einträge aus einer Excel-Datei“ → Datei hochladen.</li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="hilfe-thema">
+            <summary><span class="hilfe-thema-titel">Wo liegen meine Daten?</span></summary>
+            <div class="hilfe-inhalt">
+                <p>Nur auf diesem Handy, in dieser App. Sie gehen nicht ins Internet und liegen nicht bei GitHub –
+                    dort liegt nur das leere Programm. Die App funktioniert auch ohne Internet.</p>
+                <p class="hilfe-tipp">⚠️ Wenn du die App vom Startbildschirm löschst oder die Website-Daten des Browsers löschst,
+                    sind auch die noch nicht exportierten Einträge weg. Deshalb lieber regelmäßig exportieren.</p>
+                <p class="hilfe-tipp">📱 iPhone: Öffne die App immer über das Symbol auf dem Home-Bildschirm. Ein normaler Safari-Tab hat
+                    einen eigenen, getrennten Speicher.</p>
+            </div>
+        </details>
+
+        <details class="hilfe-thema">
+            <summary><span class="hilfe-thema-titel">Updates</span></summary>
+            <div class="hilfe-inhalt">
+                <p>Gibt es eine neue Version, erscheint beim nächsten Öffnen (mit Internet) oben „Eine neue Version ist da“.
+                    Einmal auf „Jetzt aktualisieren“ tippen – deine Einträge bleiben erhalten.</p>
+            </div>
+        </details>
+
+        <div class="card">
+            <h2>Vorschläge</h2>
+            <p class="hinweis" data-vorschlaege-text></p>
+            <button type="button" class="btn-knopf btn-grau btn-klein" data-vorschlaege-loeschen>Vorschläge löschen</button>
+        </div>
+        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 1 · passt zur Finanz-App ab Version 14</p>
+    </section>
+</main>
+
+<nav class="tab-leiste" aria-label="Bereiche">
+    <a href="#neu" class="tab" data-tab="neu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Neu</span>
+    </a>
+    <a href="#liste" class="tab" data-tab="liste">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+        <span>Liste</span>
+        <span class="tab-zahl" data-tab-zahl hidden></span>
+    </a>
+    <a href="#export" class="tab" data-tab="export">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+        <span>Export</span>
+    </a>
+    <a href="#hilfe" class="tab" data-tab="hilfe">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg>
+        <span>Hilfe</span>
+    </a>
+</nav>
+
+<div class="toast" role="status" aria-live="polite" data-toast hidden>
+    <span data-toast-text></span>
+    <button type="button" class="toast-knopf" data-toast-aktion hidden></button>
+</div>
+
+<script src="speicher_v001.js"></script>
+<script src="xlsx_v001.js"></script>
+<script src="app_v001.js"></script>
+</body>
+</html>

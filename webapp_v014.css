@@ -1,0 +1,2409 @@
+.korrektur-tabelle th {
+    font-size: 0.7rem;
+    letter-spacing: 0;
+    hyphens: manual;
+}
+
+.korrektur-tabelle th:nth-child(1) { width: 4%; }
+.korrektur-tabelle th:nth-child(2) { width: 19%; }
+.korrektur-tabelle th:nth-child(3) { width: 12%; }
+.korrektur-tabelle th:nth-child(4) { width: 11%; }
+.korrektur-tabelle th:nth-child(5) { width: 11%; }
+.korrektur-tabelle th:nth-child(6) { width: 8%; }
+.korrektur-tabelle th:nth-child(7) { width: 12%; }
+.korrektur-tabelle th:nth-child(8) { width: 12%; }
+.korrektur-tabelle th:nth-child(9) { width: 11%; }
+
+/* F9 - Dark-Mode-Redesign, F17 - fluides Layout (v5) */
+
+:root {
+    --bg: #0f172a;
+    --bg-sidebar: #0b1120;
+    --bg-card: #1e293b;
+    --bg-input: #0f172a;
+    --border: #334155;
+    --text: #e5e7eb;
+    --text-muted: #94a3b8;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --einnahmen: #22c55e;
+    --ausgaben: #ef4444;
+    --radius: 10px;
+    /* F17 - alle Abstaende/Breiten wachsen stufenlos mit dem Fenster */
+    --nav-breite: clamp(170px, 14vw, 250px);
+    --abstand: clamp(0.9rem, 2vw, 2.25rem);
+}
+
+html {
+    font-size: clamp(15px, 0.55vw + 12.5px, 18px);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* "hidden" muss staerker sein als eigene display-Regeln (z. B. bei Knoepfen) */
+[hidden] {
+    display: none !important;
+}
+
+body {
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: var(--nav-breite) minmax(0, 1fr);
+    min-height: 100vh;
+    align-items: start;
+}
+
+/* Linke Navigation */
+.sidebar {
+    background: var(--bg-sidebar);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+}
+
+.sidebar-title {
+    color: var(--text);
+    font-size: 1.15rem;
+    margin: 0 0 1.25rem 0;
+    letter-spacing: 0.02em;
+}
+
+.nav-link {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.65rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-link:hover {
+    background: #1e293b;
+    color: var(--text);
+}
+
+.nav-link.active {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+}
+
+/* Hauptinhalt */
+.content {
+    min-width: 0;
+    padding: var(--abstand);
+}
+
+h1 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-weight: 600;
+}
+
+/* Menuegruppe "Auswertung" (F32) */
+.nav-gruppe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0.35rem 0;
+    padding: 0.35rem 0 0.45rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-gruppe-titel {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 0.8rem 0.25rem 0.8rem;
+}
+
+.nav-unterpunkt {
+    margin-left: 0.6rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+}
+
+/* Diagramme-Seite (F10/F32) */
+.diagramm-felder {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 0.9rem 1.25rem;
+    margin-bottom: 0.9rem;
+}
+
+.diagramm-form .form-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.diagramm-form label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.diagramm-form select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.diagramm-hinweis {
+    font-size: 0.8rem;
+    margin: 0 0 1rem 0;
+}
+
+.diagramm-vorschau-titel {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+}
+
+.diagramm-bild {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+}
+
+.diagramm-vorschau-zeit {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 0.5rem 0 0.6rem 0;
+}
+
+.diagramm-downloads {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Kacheln / Kennzahlen */
+.summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* F17 - mehrere Karten nebeneinander, solange Platz ist, sonst untereinander */
+.karten-raster {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.summary-box {
+    min-width: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+}
+
+.summary-box .label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+.summary-box .value {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.summary-box.einnahmen .value { color: var(--einnahmen); }
+.summary-box.ausgaben .value { color: var(--ausgaben); }
+.summary-box.saldo.positiv .value { color: var(--einnahmen); }
+.summary-box.saldo.negativ .value { color: var(--ausgaben); }
+
+.card {
+    min-width: 0;
+    /* Die Karte selbst scrollt NICHT - sonst koennte die Aktionsleiste nicht mitlaufen (F43).
+       Breite Tabellen stehen in einem eigenen Rahmen (.tabellen-rahmen). */
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.05rem;
+}
+
+/* Formulare */
+.entry-form .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.75rem;
+}
+
+.entry-form label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.entry-form input,
+.entry-form select {
+    padding: 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.entry-form button {
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.entry-form button:hover {
+    background: var(--accent-hover);
+}
+
+/* Formularfelder nutzen die verfuegbare Breite (F17) */
+.entry-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    column-gap: 1.25rem;
+    align-items: start;
+}
+
+.entry-form > button,
+.entry-form > a {
+    grid-column: 1 / -1;
+    justify-self: start;
+}
+
+.entry-form .form-row {
+    min-width: 0;
+}
+
+.entry-form input[readonly],
+.entry-form input.gesperrt {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.optional {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.feld-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.feld-hinweis {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+}
+
+/* F13 - Einnahme/Ausgabe als Schalter-Buttons */
+.typ-schalter {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.typ-schalter input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.entry-form .typ-schalter label {
+    flex: 1;
+    margin: 0;
+    padding: 0.55rem 0.75rem;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-muted);
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.typ-schalter input:focus-visible + label {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.entry-form .typ-schalter input:checked + label.typ-einnahme {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: var(--einnahmen);
+    color: var(--einnahmen);
+    font-weight: 600;
+}
+
+.entry-form .typ-schalter input:checked + label.typ-ausgabe {
+    background: rgba(239, 68, 68, 0.18);
+    border-color: var(--ausgaben);
+    color: var(--ausgaben);
+    font-weight: 600;
+}
+
+/* Tabellen */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 0.55rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+a {
+    color: var(--accent);
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+.zahl {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.zahl.einnahmen { color: var(--einnahmen); }
+.zahl.ausgaben { color: var(--ausgaben); }
+
+.hinweis {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.aktionen {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.btn-link.btn-danger {
+    color: var(--ausgaben);
+}
+
+.filter-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-form label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.filter-form select,
+.filter-form input[type="month"] {
+    padding: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.inline-input {
+    padding: 0.3rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    width: 140px;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.zuordnen-status {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.zuordnen-status.status-speichert { color: var(--text-muted); }
+.zuordnen-status.status-ok { color: var(--einnahmen); }
+.zuordnen-status.status-fehler { color: var(--ausgaben); }
+
+.flash-messages {
+    margin-bottom: 1rem;
+}
+
+.flash {
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border);
+}
+
+.flash-error {
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.flash-success {
+    background: rgba(34, 197, 94, 0.12);
+    color: #86efac;
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+/* F17 - Responsive in Stufen. Dazwischen passt sich alles stufenlos ueber clamp()/auto-fit an. */
+
+/* Schmale Fenster / Handy: alles untereinander, Navigation als Leiste oben */
+@media (max-width: 800px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+        position: static;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        padding: 0.75rem var(--abstand);
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    .sidebar-title {
+        display: none;
+    }
+    .nav-gruppe {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .nav-gruppe-titel {
+        padding: 0 0.3rem;
+    }
+    .nav-unterpunkt {
+        margin-left: 0;
+        font-size: 0.95rem;
+        padding: 0.65rem 0.8rem;
+    }
+}
+
+/* F21-F23 - Excel-Import */
+.btn-knopf {
+    display: inline-block;
+    padding: 0.6rem 1.1rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-knopf:hover {
+    background: var(--accent-hover);
+    color: white;
+}
+
+.btn-knopf-grau {
+    background: #475569;
+}
+
+.btn-knopf-grau:hover {
+    background: #64748b;
+}
+
+.upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.upload-form input[type="file"] {
+    flex: 1 1 220px;
+    min-width: 0;
+    color: var(--text);
+}
+
+.korrektur-aktionen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.korrektur-tabelle {
+    table-layout: fixed;
+    min-width: 780px;  /* darunter scrollt die Tabelle in der Karte horizontal */
+}
+
+.korrektur-tabelle th,
+.korrektur-tabelle td {
+    padding: 0.45rem 0.3rem;
+    overflow-wrap: anywhere;
+}
+
+.korrektur-tabelle th:nth-child(1) { width: 5%; }
+.korrektur-tabelle th:nth-child(2) { width: 20%; }
+.korrektur-tabelle th:nth-child(3) { width: 14%; }
+.korrektur-tabelle th:nth-child(4) { width: 12%; }
+.korrektur-tabelle th:nth-child(5) { width: 13%; }
+.korrektur-tabelle th:nth-child(6) { width: 9%; }
+.korrektur-tabelle th:nth-child(7) { width: 14%; }
+.korrektur-tabelle th:nth-child(8) { width: 13%; }
+
+.korrektur-tabelle td {
+    vertical-align: top;
+}
+
+.tabellen-eingabe {
+    width: 100%;
+    min-width: 0;
+    padding: 0.3rem 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.verwerfen-knopf {
+    padding-left: 0;
+    margin-top: 0.3rem;
+}
+
+.problem-text {
+    color: #fca5a5;
+    font-size: 0.82rem;
+}
+
+.dublette-wahl {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--text);
+}
+
+.original-wert {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+/* F27 - Schalter "Steuerrelevant" (und "Dauerhaft" bei den Fixkosten) */
+.steuer-schalter input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.entry-form .steuer-schalter label {
+    display: inline-block;
+    margin: 0;
+    padding: 0.55rem 1rem;
+    font-size: 1rem;
+    color: var(--text-muted);
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.steuer-schalter input:focus-visible + label {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.entry-form .steuer-schalter input:checked + label {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--accent);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.entry-form .steuer-schalter input:checked + label::before {
+    content: "✓ ";
+}
+
+.entry-form .typ-schalter input:checked + label.rhythmus-wahl {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--accent);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.badge-steuer,
+.badge-status {
+    display: inline-block;
+    margin-left: 0.35rem;
+    padding: 0.05rem 0.45rem;
+    font-size: 0.7rem;
+    border-radius: 999px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.badge-steuer {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid var(--accent);
+}
+
+.badge-status {
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+/* F26 - Fixkosten */
+.monat-leiste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.monat-leiste .filter-form {
+    margin: 0;
+}
+
+.fixkosten-tabelle .notiz {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+/* F25/F29 - Drag & Drop */
+.upload-form-spalte {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.dropzone {
+    position: relative;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    background: var(--bg-input);
+    color: var(--text-muted);
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone:hover,
+.dropzone:focus-within {
+    border-color: var(--accent);
+}
+
+.dropzone.drag-aktiv {
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.dropzone.hat-dateien {
+    border-style: solid;
+    border-color: var(--einnahmen);
+}
+
+.dropzone-eingabe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.dropzone-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    pointer-events: none;
+}
+
+.dropzone-text strong {
+    color: var(--text);
+}
+
+.dropzone-auswahl {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    color: var(--text);
+    font-size: 0.9rem;
+    pointer-events: none;
+    overflow-wrap: anywhere;
+}
+
+.dropzone-meldung {
+    color: #fca5a5;
+    font-size: 0.85rem;
+}
+
+.dropzone-meldung[hidden] {
+    display: none;
+}
+
+.btn-knopf:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* F28/F29 - Steuern & Belege */
+.beleg-felder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    align-items: flex-start;
+}
+
+.beleg-felder .form-row {
+    flex: 1 1 240px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.beleg-felder label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.beleg-felder input,
+.beleg-felder select {
+    width: 100%;
+    min-width: 0;
+    padding: 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.beleg-felder input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.steuer-tabelle td:first-child,
+.steuer-tabelle .zahl {
+    white-space: nowrap;
+}
+
+.aktionen-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.1rem 0.25rem;
+}
+
+.beleg-tabelle .aktionen {
+    white-space: normal;
+}
+
+.beleg-tabelle td {
+    overflow-wrap: anywhere;
+}
+
+.beleg-link {
+    display: block;
+    max-width: 11rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--accent);
+}
+
+.beleg-fehlt {
+    color: var(--text-muted);
+}
+
+.beleg-tabelle .vorschau {
+    width: 3.5rem;
+}
+
+.beleg-tabelle .vorschau img {
+    display: block;
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.vorschau-art {
+    display: inline-block;
+    min-width: 2.75rem;
+    padding: 0.7rem 0.2rem;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+code {
+    background: var(--bg-input);
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+
+/* ===========================================================================
+   v10 - Überblick, Menü, Mehrfachauswahl, Diagramme, Fixkosten (F34-F40)
+   =========================================================================== */
+
+/* Menü: Gruppe "Auswertung" (F34) und abgesetzter Fixkosten-Bereich (F40) */
+.nav-gruppe {
+    margin: 0.35rem 0;
+}
+
+.nav-gruppe-titel {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+
+.nav-gruppe-titel::-webkit-details-marker { display: none; }
+
+.nav-gruppe-titel::before {
+    content: "›";
+    display: inline-block;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: transform 0.15s ease;
+}
+
+.nav-gruppe[open] > .nav-gruppe-titel::before { transform: rotate(90deg); }
+.nav-gruppe-titel:hover { background: #1e293b; color: var(--text); }
+
+.nav-unterpunkt {
+    margin-left: 1.1rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+}
+
+.nav-abschnitt {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.nav-abschnitt-titel {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0 0.8rem 0.35rem 0.8rem;
+}
+
+.nav-fixkosten::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 0.5rem;
+    border-radius: 2px;
+    background: #a78bfa;
+    vertical-align: middle;
+}
+
+/* Seitenkopf */
+.seiten-kopf {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.seiten-kopf-zusatz {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.kennzeichen-getrennt {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.16);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    align-self: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Kennzahlen (F35) */
+.kennzahlen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.kennzahl {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+}
+
+.kennzahl-titel {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.kennzahl-wert {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.kennzahl-trend {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.kennzahl.ist-einnahmen { border-left-color: var(--einnahmen); }
+.kennzahl.ist-einnahmen .kennzahl-wert { color: var(--einnahmen); }
+.kennzahl.ist-ausgaben { border-left-color: var(--ausgaben); }
+.kennzahl.ist-ausgaben .kennzahl-wert { color: var(--ausgaben); }
+.kennzahl.ist-plus { border-left-color: var(--einnahmen); }
+.kennzahl.ist-plus .kennzahl-wert { color: var(--einnahmen); }
+.kennzahl.ist-minus { border-left-color: var(--ausgaben); }
+.kennzahl.ist-minus .kennzahl-wert { color: var(--ausgaben); }
+.kennzahl.ist-fixkosten { border-left-color: #a78bfa; }
+
+.kennzahl-trend.ist-hoch { color: #86efac; }
+.kennzahl-trend.ist-runter { color: #fca5a5; }
+.kennzahl.ist-ausgaben .kennzahl-trend.ist-hoch { color: #fca5a5; }
+.kennzahl.ist-ausgaben .kennzahl-trend.ist-runter { color: #86efac; }
+
+.karten-raster-weit {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+}
+
+.karten-kopf {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.karten-kopf h2 { margin-bottom: 0.75rem; }
+
+.karten-kopf-zusatz {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Balkenliste "Größte Ausgaben" */
+.balken-liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.balken-liste li {
+    display: grid;
+    grid-template-columns: minmax(80px, 1fr) minmax(60px, 2fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.balken-spur {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--bg-input);
+    overflow: hidden;
+}
+
+.balken-wert {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f87171, #ef4444);
+}
+
+.balken-zahl {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.werte-tabelle th {
+    font-weight: 500;
+}
+
+.werte-tabelle tr:last-child th,
+.werte-tabelle tr:last-child td {
+    border-bottom: none;
+}
+
+/* Eintragslisten mit Mehrfachauswahl (F39) */
+.tabellen-rahmen {
+    overflow-x: auto;
+}
+
+.eintrags-tabelle {
+    min-width: 520px;
+}
+
+.eintrags-tabelle tbody tr.ist-markiert {
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.spalte-haken {
+    width: 2.2rem;
+    padding-right: 0;
+}
+
+.spalte-haken input[type="checkbox"] {
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.spalte-datum {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.typ-punkt {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.45rem;
+    vertical-align: middle;
+}
+
+.typ-punkt.ist-einnahme { background: var(--einnahmen); }
+.typ-punkt.ist-ausgabe { background: var(--ausgaben); }
+
+.auswahl-leiste {
+    position: sticky;
+    bottom: 0.75rem;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+    padding: 0.7rem 0.9rem;
+    background: #172554;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.auswahl-leiste[hidden] { display: none; }
+
+.auswahl-anzahl {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-right: 0.3rem;
+}
+
+.auswahl-trenner {
+    width: 1px;
+    align-self: stretch;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.auswahl-aendern {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.auswahl-leiste select,
+.auswahl-leiste input[type="text"] {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.85rem;
+    background: var(--bg-input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.auswahl-wert[hidden] { display: none; }
+
+.btn-klein {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+.btn-grau {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.btn-grau:hover { background: #1e293b; color: var(--text); }
+
+.btn-gefahr {
+    background: #b91c1c;
+}
+
+.btn-gefahr:hover { background: #991b1b; }
+
+.liste-hinweis {
+    margin-top: 0.6rem;
+}
+
+/* Schalter "Steuerrelevant" (F36) */
+.schalter-feld {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.schalter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.7rem 0.4rem 0.45rem;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.schalter-laufbahn {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    border-radius: 999px;
+    background: #334155;
+    transition: background 0.18s ease;
+}
+
+.schalter-knopf {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.schalter.ist-an {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: var(--accent);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.schalter.ist-an .schalter-laufbahn { background: var(--accent); }
+.schalter.ist-an .schalter-knopf { transform: translateX(18px); background: #fff; }
+.schalter .schalter-an { display: none; }
+.schalter.ist-an .schalter-aus { display: none; }
+.schalter.ist-an .schalter-an { display: inline; }
+.schalter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Ausklappbare Karte (Excel-Import auf der Seite "Eintragen", F34) */
+.ausklapp-karte summary { list-style: none; cursor: pointer; }
+.ausklapp-karte summary::-webkit-details-marker { display: none; }
+
+.ausklapp-kopf {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.ausklapp-kopf::before {
+    content: "›";
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+}
+
+.ausklapp-karte[open] .ausklapp-kopf::before { transform: rotate(90deg); }
+
+.ausklapp-titel {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.ausklapp-zusatz {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.import-schritte {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+}
+
+.import-schritt {
+    display: flex;
+    gap: 0.9rem;
+}
+
+.import-schritt h3 {
+    margin: 0 0 0.4rem 0;
+    font-size: 1rem;
+}
+
+.schritt-nummer {
+    flex: none;
+    width: 1.8rem;
+    height: 1.8rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Diagramme (F37) */
+.schnellwahl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.schnell-knopf {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-align: left;
+    padding: 0.75rem 0.9rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.schnell-knopf:hover {
+    border-color: var(--accent);
+    background: #1e293b;
+}
+
+.schnell-titel { font-weight: 600; font-size: 0.95rem; }
+.schnell-text { color: var(--text-muted); font-size: 0.8rem; }
+
+.diagramm-felder {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+    gap: 0.9rem 1.25rem;
+}
+
+.diagramm-form .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.diagramm-form label,
+.diagramm-form .feld-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.diagramm-form select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.diagramm-form .form-row.ist-aus {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* Umschalter aus Knöpfen (Darstellung, Zeitachse, Werte) */
+.wahl-schalter {
+    display: flex;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 2px;
+    gap: 2px;
+}
+
+.wahl-schalter input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wahl-schalter label {
+    flex: 1;
+    margin: 0;
+    padding: 0.4rem 0.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.wahl-schalter input:checked + label {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+.wahl-schalter input:focus-visible + label {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.diagramm-ladebalken {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.diagramm-behaelter {
+    position: relative;
+    width: 100%;
+}
+
+.diagramm-behaelter.gross { min-height: 300px; }
+
+.diagramm-downloads {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+/* Zeichenfläche der Diagramme (static/diagramm.js) */
+.dg-flaeche { position: relative; }
+.dg-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.dg-gitter { stroke: #233047; stroke-width: 1; }
+.dg-gitter.dg-null { stroke: #3c4d6b; }
+.dg-achsentext { fill: #94a3b8; font-size: 11px; font-family: inherit; }
+.dg-balken { transition: opacity 0.15s ease; }
+.dg-flaeche-fuellung { opacity: 0.14; }
+.dg-markierung { fill: rgba(148, 163, 184, 0.12); pointer-events: none; }
+.dg-stueck { transition: opacity 0.15s ease; cursor: default; }
+.dg-stueck:hover { opacity: 0.82; }
+.dg-kreis-mitte { fill: #e5e7eb; font-size: 17px; font-weight: 700; font-family: inherit; pointer-events: none; }
+.dg-kreis-unter { fill: #94a3b8; font-size: 11px; font-family: inherit; pointer-events: none; }
+.dg-achsentext, .dg-gitter { pointer-events: none; }
+
+.dg-tooltip {
+    position: absolute;
+    top: 8px;
+    min-width: 150px;
+    padding: 0.5rem 0.65rem;
+    background: #0b1120;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    font-size: 0.82rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+}
+
+.dg-tooltip.ist-sichtbar { opacity: 1; }
+.dg-tooltip-titel { font-weight: 700; margin-bottom: 0.3rem; }
+
+.dg-tooltip-zeile {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+}
+
+.dg-tooltip-name { color: var(--text-muted); }
+.dg-tooltip-wert { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.dg-legende {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin-top: 0.85rem;
+}
+
+.dg-legende-punkt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    padding: 0.15rem 0.2rem;
+    color: var(--text);
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.dg-legende-punkt:disabled { cursor: default; }
+.dg-legende-punkt.ist-aus { opacity: 0.4; text-decoration: line-through; }
+
+.dg-punkt {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex: none;
+}
+
+.dg-leer {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* Fixkosten: Jahresraster (F38) */
+.raster-tabelle {
+    min-width: 760px;
+    font-variant-numeric: tabular-nums;
+}
+
+.raster-tabelle th,
+.raster-tabelle td {
+    padding: 0.45rem 0.4rem;
+    font-size: 0.85rem;
+}
+
+.raster-tabelle .raster-name {
+    text-align: left;
+    min-width: 170px;
+    position: sticky;
+    left: 0;
+    background: var(--bg-card);
+}
+
+.raster-zeitraum {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.raster-tabelle th a { color: inherit; text-decoration: none; }
+.raster-tabelle th a:hover { color: var(--accent); }
+.raster-tabelle .ist-gewaehlt { background: rgba(59, 130, 246, 0.14); }
+.raster-tabelle .ist-leer { color: #475569; }
+.raster-tabelle .ist-anteilig { font-style: italic; color: #c4b5fd; }
+.raster-tabelle .raster-summe { font-weight: 700; border-left: 1px solid var(--border); }
+.raster-tabelle tfoot td,
+.raster-tabelle tfoot th { font-weight: 700; border-top: 2px solid var(--border); }
+.ist-anteilig-beispiel { font-style: italic; color: #c4b5fd; }
+
+.anteil-hinweis {
+    display: block;
+    font-size: 0.72rem;
+    color: #c4b5fd;
+    font-weight: 400;
+}
+
+.summe-zeile {
+    margin: 0.9rem 0 0 0;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.fixkosten-tabelle { min-width: 720px; }
+
+/* Schmale Fenster */
+@media (max-width: 800px) {
+    .nav-gruppe,
+    .nav-abschnitt {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .nav-abschnitt-titel { display: none; }
+    .nav-unterpunkt { margin-left: 0; font-size: 0.95rem; }
+    .nav-gruppe-titel { padding: 0.65rem 0.6rem; }
+    .auswahl-leiste { position: static; }
+}
+
+/* ===========================================================================
+   v11 - Suche, Ausklapp-Listen, Aktionsleiste oben, Diagramm-Baukasten (F41-F46)
+   =========================================================================== */
+
+/* Aktionsleiste sitzt jetzt OBEN an der Liste und laeuft mit (F43) */
+.auswahl-leiste {
+    position: sticky;
+    top: 0.5rem;
+    bottom: auto;
+    margin: 0 0 0.75rem 0;
+    z-index: 6;
+}
+
+/* Suche (F41) */
+.such-leiste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.9rem;
+}
+
+.such-feld {
+    position: relative;
+    flex: 1 1 240px;
+    min-width: 180px;
+}
+
+.such-feld input {
+    width: 100%;
+    padding: 0.5rem 0.6rem 0.5rem 2rem;
+    background: var(--bg-input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: 0.95rem;
+}
+
+.such-feld::before {
+    content: "⌕";
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+.such-leiste select {
+    padding: 0.45rem 0.5rem;
+    background: var(--bg-input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: 0.85rem;
+}
+
+.such-haken {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.such-haken input {
+    accent-color: var(--accent);
+}
+
+.filter-hinweis {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 0 0 0.9rem 0;
+}
+
+.filter-marke {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.16);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    font-size: 0.82rem;
+}
+
+.seiten-aktionen {
+    margin: 0 0 1.25rem 0;
+}
+
+/* Ausklappbare Zeilen in den Uebersichten (F44) */
+.ausklapp-knopf {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    padding: 0.15rem 0;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.ausklapp-knopf:hover { color: var(--accent); }
+
+.ausklapp-pfeil {
+    display: inline-block;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+}
+
+.ausklapp-knopf.ist-offen .ausklapp-pfeil { transform: rotate(90deg); }
+.ausklapp-leer { color: var(--text-muted); }
+
+.aufklapp-tabelle tbody tr:hover > td { background: rgba(148, 163, 184, 0.06); }
+.aufklapp-tabelle tr.ist-leer td { color: var(--text-muted); }
+
+.ausklapp-inhalt > td {
+    background: rgba(15, 23, 42, 0.55);
+    padding: 0.9rem 0.75rem 1.1rem 1.75rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.ausklapp-kopfzeile {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+}
+
+.leise { color: var(--text-muted); }
+
+a.still {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--border);
+}
+
+a.still:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Diagramm-Baukasten (F45) */
+.baukasten {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 1rem 1.5rem;
+}
+
+.baukasten-darstellung {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 1rem 1.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.baukasten-feld {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.baukasten-feld .feld-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.baukasten-feld select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.wahl-schalter.klein label { font-size: 0.78rem; padding: 0.3rem 0.4rem; }
+.wahl-schalter label.ist-gesperrt { opacity: 0.35; cursor: not-allowed; }
+.baukasten-feld.ist-aus, .wahl-schalter.ist-aus { opacity: 0.4; pointer-events: none; }
+
+.dg-svg.ist-klickbar { cursor: pointer; }
+.dg-balken.ist-klickbar:hover { opacity: 0.8; }
+.dg-stueck.ist-klickbar { cursor: pointer; }
+
+@media (max-width: 800px) {
+    .auswahl-leiste { position: static; }
+    .ausklapp-inhalt > td { padding-left: 0.5rem; }
+}
+
+/* Die Knöpfe der Umschalter sind normale Beschriftungen, keine Überschriften */
+.diagramm-form .wahl-schalter { flex-wrap: wrap; }
+
+.diagramm-form .wahl-schalter label {
+    text-transform: none;
+    font-size: 0.85rem;
+    letter-spacing: 0;
+    color: var(--text-muted);
+    flex: 0 1 auto;          /* jede Beschriftung so breit wie ihr Text, sonst Umbruch */
+    padding: 0.4rem 0.65rem;
+}
+
+.diagramm-form .wahl-schalter.klein label { font-size: 0.78rem; }
+.diagramm-form .wahl-schalter input:checked + label { color: #fff; }
+
+/* Der Steuer-Schalter ist ein Knopf, soll aber nicht wie der Absende-Knopf aussehen */
+.entry-form button.schalter,
+.entry-form button.schalter:hover {
+    margin-top: 0;
+    padding: 0.4rem 0.7rem 0.4rem 0.45rem;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.entry-form button.schalter.ist-an,
+.entry-form button.schalter.ist-an:hover {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+/* =====================================================================
+   v12
+   ===================================================================== */
+
+/* F49 - Umschalter einfach / komplex, oben im Menü */
+.modus-schalter {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    margin: -0.5rem 0 1rem 0;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.modus-schalter .modus-knopf {
+    flex: 1;
+    padding: 0.4rem 0.3rem;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.modus-schalter .modus-knopf:hover { color: var(--text); background: #1e293b; }
+
+.modus-schalter .modus-knopf.ist-an {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+.modus-schalter .modus-knopf:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+@media (max-width: 800px) {
+    .modus-schalter { margin: 0; flex: 0 0 auto; order: -1; width: 100%; max-width: 260px; }
+}
+
+/* F53 - Sortierbare Spaltenköpfe */
+.sortier-knopf {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.sortier-knopf:hover { color: var(--text); }
+th.zahl .sortier-knopf { flex-direction: row-reverse; }
+.sortier-pfeil { font-size: 0.85em; opacity: 0.45; }
+th.ist-sortiert { color: var(--text); }
+th.ist-sortiert .sortier-pfeil { opacity: 1; color: var(--accent); }
+
+/* F51 - Übersichten: Reiter + gemeinsame Auswahl */
+.reiter-leiste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+}
+
+.reiter {
+    padding: 0.65rem 1.1rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    font-weight: 500;
+}
+
+.reiter:hover { color: var(--text); }
+.reiter.ist-aktiv { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+
+.auswahl-karte {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    align-items: flex-end;
+}
+
+.auswahl-feld { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.auswahl-feld select { min-width: 10rem; max-width: 100%; }
+.auswahl-feld .wahl-schalter label { padding: 0.4rem 0.85rem; }
+
+.anteil-balken {
+    display: inline-block;
+    width: 3.5rem;
+    height: 6px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    border-radius: 999px;
+    background: var(--bg-input);
+    overflow: hidden;
+}
+
+.anteil-balken > span { display: block; height: 100%; background: var(--ausgaben); border-radius: 999px; }
+.anteil-balken.ist-einnahmen > span { background: var(--einnahmen); }
+
+.summen-zeile td { font-weight: 700; border-top: 2px solid var(--border); }
+.kopfzeile-links { display: inline-flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+
+.jahres-chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 0.75rem 0;
+    padding: 0;
+}
+
+.jahres-chips li {
+    display: inline-flex;
+    gap: 0.45rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.chip-jahr { color: var(--text-muted); font-weight: 600; }
+
+tr.ist-sprungziel > td { box-shadow: inset 3px 0 0 var(--accent); background: rgba(59, 130, 246, 0.08); }
+
+/* F52 - mehr Optionen bei der Zeitachse: Umbruch erlauben */
+.wahl-schalter.klein { flex-wrap: wrap; }
+
+/* F54 - Fun-Facts */
+.ff-zeitraum { margin-top: -0.25rem; }
+.ff-highlights .kennzahl-wert { font-size: 1.35rem; }
+.ff-highlights .ff-label { font-size: 0.8rem; }
+
+.ff-wert { display: block; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ff-label { display: block; font-size: 0.8rem; margin-top: 0.1rem; }
+.ff-tabelle th[scope="row"] { color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+.ff-tabelle td { vertical-align: top; min-width: 9rem; }
+
+.ff-liste {
+    display: grid;
+    grid-template-columns: minmax(8rem, auto) 1fr;
+    gap: 0.55rem 1rem;
+    margin: 0;
+    font-size: 0.92rem;
+}
+
+.ff-liste dt { color: var(--text-muted); }
+.ff-liste dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+.rang-auswahl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.2rem;
+    align-items: center;
+    margin-bottom: 0.9rem;
+    color: var(--text-muted);
+}
+
+.rang-auswahl label { display: inline-flex; align-items: center; gap: 0.45rem; }
+.ff-rangliste td.ist-betont { font-weight: 700; }
+.ff-jahre td { white-space: nowrap; }
+
+/* F48 - Datensicherung */
+.hinweis-liste { margin: 1rem 0 0 0; padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem; display: grid; gap: 0.4rem; }
+.meldungs-liste { margin: 0.25rem 0 1rem 0; padding-left: 1.2rem; font-size: 0.9rem; display: grid; gap: 0.3rem; }
+.meldungs-liste.ist-fehler { color: #fca5a5; }
+.ergebnis-karte { border-left: 4px solid var(--einnahmen); }
+
+@media (max-width: 600px) {
+    .ff-liste { grid-template-columns: 1fr; gap: 0.15rem; }
+    .ff-liste dd { margin-bottom: 0.5rem; }
+    .auswahl-karte { flex-direction: column; align-items: stretch; }
+}
+
+/* v12 - Feinschliff nach Sichtprüfung */
+.auswahl-feld select,
+.rang-auswahl select {
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    background: var(--bg-input);
+    color: var(--text);
+}
+
+.auswahl-karte { align-items: flex-end; }
+.auswahl-feld .feld-label { font-size: 0.82rem; color: var(--text-muted); }
+
+/* Beträge nie mitten in der Zahl umbrechen */
+td.zahl, .balken-zahl, .ff-wert { white-space: nowrap; }
+
+/* Fun-Facts: die drei Infokarten brauchen etwas mehr Breite */
+.ff-raster { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.ff-raster .werte-tabelle th { white-space: nowrap; }
+.ff-raster { grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+
+@media (max-width: 600px) {
+    .auswahl-karte { flex-direction: column; align-items: stretch; }
+    .auswahl-feld select { width: 100%; }
+    .auswahl-feld .wahl-schalter { width: 100%; }
+}
+
+/* =====================================================================
+   v13
+   ===================================================================== */
+:root { --investiert: #a78bfa; }
+
+/* F57 - Investments */
+.investiert, td.zahl.investiert { color: var(--investiert); }
+.kennzahl.ist-investiert { border-left-color: var(--investiert); }
+.kennzahl.ist-investiert .kennzahl-wert { color: var(--investiert); }
+.typ-punkt.ist-invest { background: var(--investiert); }
+.anteil-balken.ist-investiert > span { background: var(--investiert); }
+.badge-invest {
+    display: inline-block;
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #ddd6fe;
+    background: rgba(167, 139, 250, 0.16);
+    border: 1px solid rgba(167, 139, 250, 0.45);
+    white-space: nowrap;
+}
+.invest-hinweis { border-left: 3px solid var(--investiert); padding-left: 0.6rem; }
+
+/* Schalter im Menü (F57) und auf der Fixkosten-Seite (F58) */
+.invest-schalter { margin: -0.4rem 0 0.9rem 0; }
+.invest-knopf, .schalter-gross {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 0.35rem 0.45rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.8rem;
+    text-align: left;
+    cursor: pointer;
+}
+.schalter-gross { width: auto; font-size: 0.95rem; padding: 0.55rem 0.8rem; }
+.invest-knopf:hover, .schalter-gross:hover { color: var(--text); }
+.invest-knopf .schalter-laufbahn, .schalter-gross .schalter-laufbahn { flex: 0 0 auto; }
+.invest-knopf.ist-an .schalter-laufbahn { background: var(--investiert); }
+.schalter-gross.ist-an .schalter-laufbahn { background: var(--accent); }
+.invest-knopf.ist-an .schalter-knopf, .schalter-gross.ist-an .schalter-knopf { transform: translateX(18px); background: #fff; }
+.invest-knopf.ist-an { color: var(--text); }
+.schalter-gross.ist-an { color: var(--text); border-color: var(--accent); background: rgba(59, 130, 246, 0.12); }
+.einrechnen-karte.ist-an { border-left: 4px solid #a78bfa; }
+.einrechnen-karte .hinweis { margin-bottom: 0; }
+
+/* F58 - verschmierte Fixkosten in Listen */
+tr.ist-virtuell td { color: var(--text-muted); background: rgba(167, 139, 250, 0.05); font-style: italic; }
+tr.ist-virtuell td.zahl { font-style: normal; }
+.virtuell-hinweis {
+    display: inline-block;
+    margin-left: 0.4rem;
+    font-size: 0.72rem;
+    font-style: normal;
+    color: #c4b5fd;
+}
+.virtuell-link { color: #c4b5fd; text-decoration: none; }
+
+/* F60 - einfacher Modus */
+.einfach-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
+.einfach-suche { display: flex; gap: 0.5rem; align-items: center; }
+.einfach-suche input {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text);
+    font: inherit;
+    min-width: 14rem;
+    max-width: 100%;
+}
+.einfach-liste td { vertical-align: middle; }
+.einfach-aktionen { white-space: nowrap; text-align: right; width: 5.5rem; }
+.icon-knopf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.icon-knopf:hover { color: var(--text); border-color: var(--accent); }
+.icon-knopf.ist-gefahr:hover { border-color: var(--ausgaben); color: var(--ausgaben); }
+.mehr-laden { display: flex; gap: 1rem; align-items: center; margin-top: 0.9rem; }
+
+/* F56 - Kategorien & Gruppen */
+.neu-zeile { display: flex; flex-wrap: wrap; gap: 0.75rem 2.5rem; }
+.neu-form { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.neu-form label { color: var(--text-muted); font-size: 0.88rem; }
+.neu-form input, .neu-form select, .struktur-leiste select, .struktur-leiste input, .struktur-suche {
+    padding: 0.4rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    max-width: 100%;
+}
+.struktur-leiste input { min-width: 14rem; }
+.badge-leer {
+    margin-left: 0.4rem;
+    padding: 0.02rem 0.4rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+}
+
+.brett {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(190px, 1fr);
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+.brett-spalte {
+    display: flex;
+    flex-direction: column;
+    min-height: 140px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.55);
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+.brett-spalte.ist-investment { border-top: 3px solid var(--investiert); }
+.brett-spalte.ist-ohne { border-style: dashed; }
+.brett-spalte.ist-ziel { border-color: var(--accent); background: rgba(59, 130, 246, 0.08); }
+.brett-kopf {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+.brett-titel { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.brett-zahl { color: var(--text-muted); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+.brett-karten { display: flex; flex-direction: column; gap: 0.35rem; padding: 0.55rem; flex: 1; }
+.brett-karte {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.4rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--bg-card);
+    font-size: 0.85rem;
+    cursor: grab;
+    user-select: none;
+}
+.brett-karte:hover { border-color: #475569; }
+.brett-karte.ist-gezogen { opacity: 0.4; }
+.brett-karte.ist-ziel { border-color: #f59e0b; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35); }
+.brett-hinweis { margin: 0.2rem 0 0 0; font-size: 0.75rem; color: var(--text-muted); }
+
+/* F55 - Einstellungen */
+.einstellungen-form .form-row { margin-bottom: 1rem; }
+.einstellungen-form select {
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text);
+    font: inherit;
+}
+.haken-zeile { display: flex; gap: 0.6rem; align-items: flex-start; margin: 0 0 0.8rem 0; cursor: pointer; font-size: 0.92rem; }
+.haken-zeile input { margin-top: 0.2rem; }
+.haken-liste { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0 1rem; }
+.einstellungen-speichern { margin: 0 0 1.5rem 0; }
+.gefahr-karte { border-left: 4px solid var(--ausgaben); }
+.knopf-zeile { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+.zuruecksetzen-form .form-row { max-width: 22rem; }
+.zuruecksetzen-form input[type="text"] {
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text);
+    font: inherit;
+}
+
+@media (max-width: 600px) {
+    .einfach-suche input { min-width: 0; width: 100%; }
+    .struktur-leiste input { min-width: 0; }
+}
+.einstellungen-form .form-row { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+.einstellungen-form .form-row label, .einstellungen-form .feld-label { font-size: 0.9rem; color: var(--text-muted); }
+.einstellungen-form .feld-hinweis { font-size: 0.8rem; }
+
+/* =====================================================================
+   v14
+   ===================================================================== */
+
+/* F61 - Art mit drei Möglichkeiten: eigene, volle Zeile im Formular (behebt auch die Überlappung) */
+.entry-form .form-row-art { grid-column: 1 / -1; }
+.entry-form .form-row-art .typ-schalter { max-width: 34rem; flex-wrap: wrap; }
+.entry-form .typ-schalter label { min-width: 0; white-space: nowrap; }
+.entry-form .typ-schalter input:checked + label.typ-investment {
+    background: rgba(167, 139, 250, 0.18);
+    border-color: var(--investiert);
+    color: var(--investiert);
+    font-weight: 600;
+}
+.rueckfluss-wahl { max-width: 22rem; margin-top: 0.45rem; }
+.einfach-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); }
+
+/* F62 - direkte Einträge einer Gruppe */
+.direkt-titel { margin: 1rem 0 0.4rem 0; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+
+/* F65 - Zeitraum im einfachen Modus */
+.zeitraum-leiste { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin: 0 0 1.25rem 0; }
+.zeitraum-leiste h1 { margin: 0 0.5rem 0 0; }
+.zeitraum-leiste select, .zeitraum-leiste .wahl-schalter {
+    font: inherit;
+}
+.zeitraum-leiste select {
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text);
+}
+.zeitraum-leiste form { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+/* F63 - Brett: anklickbar, Fenster mit dem Inhalt */
+.brett-karte, .brett-kopf { cursor: pointer; }
+.brett-kopf:hover .brett-titel, .brett-karte:hover span:first-child { color: var(--accent); }
+dialog.inhalt-fenster {
+    width: min(760px, calc(100vw - 2rem));
+    max-height: min(80vh, 760px);
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--text);
+}
+dialog.inhalt-fenster::backdrop { background: rgba(2, 6, 23, 0.7); }
+.inhalt-kopf { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); }
+.inhalt-kopf h2 { margin: 0; font-size: 1.1rem; }
+.inhalt-koerper { padding: 0.8rem 1.2rem 1.2rem; overflow: auto; max-height: calc(min(80vh, 760px) - 4.5rem); }
+.inhalt-summen { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin: 0 0 0.8rem 0; font-size: 0.9rem; }
+.leere-karte { border-left: 4px solid #64748b; }
+.leere-liste { margin: 0.3rem 0 0.8rem 0; font-size: 0.88rem; color: var(--text-muted); }
+
+/* F66 - Anleitung */
+.hilfe-suche {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font: inherit;
+    font-size: 1.05rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-input);
+    color: var(--text);
+}
+.hilfe-suche:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hilfe-treffer { margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
+.hilfe-raster { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.hilfe-navi { position: sticky; top: 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
+.hilfe-navi a { color: var(--text-muted); text-decoration: none; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.9rem; }
+.hilfe-navi a:hover, .hilfe-navi a.ist-aktiv { background: #1e293b; color: var(--text); }
+.hilfe-bereich-titel { margin: 1.5rem 0 0.6rem 0; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.hilfe-thema { border: 1px solid var(--border); border-radius: 10px; background: var(--bg-card); margin-bottom: 0.6rem; }
+.hilfe-thema > summary { list-style: none; cursor: pointer; padding: 0.85rem 1rem; display: flex; gap: 0.75rem; align-items: baseline; }
+.hilfe-thema > summary::-webkit-details-marker { display: none; }
+.hilfe-thema > summary::before { content: "›"; color: var(--text-muted); transition: transform 0.15s ease; display: inline-block; }
+.hilfe-thema[open] > summary::before { transform: rotate(90deg); }
+.hilfe-thema-titel { font-weight: 600; }
+.hilfe-thema-kurz { color: var(--text-muted); font-size: 0.88rem; }
+.hilfe-inhalt { padding: 0 1rem 1rem 2rem; font-size: 0.93rem; line-height: 1.55; }
+.hilfe-inhalt ol { padding-left: 1.2rem; margin: 0.5rem 0; }
+.hilfe-inhalt li { margin-bottom: 0.3rem; }
+.hilfe-tipp { border-left: 3px solid var(--accent); padding: 0.4rem 0.7rem; background: rgba(59, 130, 246, 0.07); border-radius: 0 6px 6px 0; margin: 0.6rem 0; }
+.hilfe-modus { font-size: 0.72rem; padding: 0.05rem 0.45rem; border-radius: 999px; border: 1px solid var(--border); color: var(--text-muted); white-space: nowrap; }
+mark.hilfe-markierung { background: rgba(245, 158, 11, 0.35); color: inherit; border-radius: 3px; padding: 0 1px; }
+.tour { border-left: 4px solid var(--accent); }
+.tour-schritte { display: flex; gap: 0.35rem; margin: 0 0 1rem 0; flex-wrap: wrap; }
+.tour-punkt { width: 2rem; height: 0.35rem; border-radius: 999px; background: var(--border); border: none; cursor: pointer; padding: 0; }
+.tour-punkt.ist-aktiv { background: var(--accent); }
+.tour-karte h3 { margin: 0 0 0.4rem 0; }
+.tour-knoepfe { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+.hilfe-knopf {
+    position: fixed;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 30;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+.hilfe-knopf:hover { background: var(--accent-hover); color: #fff; }
+@media (max-width: 800px) {
+    .hilfe-raster { grid-template-columns: minmax(0, 1fr); }
+    .hilfe-navi { position: static; flex-direction: row; flex-wrap: wrap; }
+}
