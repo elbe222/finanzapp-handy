@@ -15,15 +15,17 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Optik 1:1 aus der WebApp (style.css aus Version 14), dazu nur das Handy-Gerüst -->
-    <link rel="stylesheet" href="webapp_v014.css">
-    <link rel="stylesheet" href="handy_v001.css">
+    <!-- Version 2: Optik und Farben wie die Finanz-App am PC (Version 19/20), dazu das Handy-Gerüst -->
+    <link rel="stylesheet" href="webapp_v019.css">
+    <link rel="stylesheet" href="handy_v002.css">
+    <!-- setzt das gewählte Aussehen sofort (Hell/Dunkel, Farbschema, Zahlenfarben) -->
+    <script src="farben_v001.js"></script>
 </head>
 <body class="handy">
 
 <header class="kopfleiste">
     <span class="kopf-titel">Finanzen <span class="kopf-zusatz">Handy</span></span>
-    <a class="kopf-zaehler" href="#liste" data-zaehler hidden></a>
+    <a class="kopf-zaehler" href="#export" data-zaehler hidden></a>
 </header>
 
 <div class="banner-bereich">
@@ -50,21 +52,23 @@
 
     <!-- ============================================================ Neu / Bearbeiten -->
     <section data-ansicht="neu" aria-labelledby="form-titel">
+        <div class="hinweis-karte" data-pc-hinweis hidden>
+            <div>
+                <strong>Kategorien vom PC übernehmen</strong>
+                <span class="banner-text">Dann schlägt die App genau deine Kategorien vor, und die Kategoriegruppe kommt automatisch mit.</span>
+            </div>
+            <div class="banner-knoepfe">
+                <a class="btn-knopf btn-klein" href="#scan">Scannen</a>
+                <button type="button" class="icon-knopf" data-pc-hinweis-zu aria-label="Hinweis schließen" title="Ausblenden">✕</button>
+            </div>
+        </div>
+        <div class="erinnerung" data-erinnerung="neu" hidden></div>
+
         <div class="card">
             <h2 id="form-titel" data-form-titel>Neuer Eintrag</h2>
             <form class="entry-form handy-form" data-formular novalidate autocomplete="off">
-                <div class="form-row">
-                    <label for="beschreibung">Name</label>
-                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf (optional)" enterkeyhint="next">
-                </div>
-                <div class="form-row">
-                    <label for="datum">Datum</label>
-                    <input type="date" id="datum" name="datum" required>
-                    <span class="feld-fehler" data-fehler="datum" hidden></span>
-                </div>
                 <div class="form-row form-row-art" data-art-feld>
-                    <span class="feld-label" id="typ-label">Art</span>
-                    <div class="typ-schalter" role="radiogroup" aria-labelledby="typ-label">
+                    <div class="typ-schalter" role="radiogroup" aria-label="Art">
                         <input type="radio" id="typ-einnahme" name="typ" value="Einnahme">
                         <label for="typ-einnahme" class="typ-einnahme">Einnahme</label>
                         <input type="radio" id="typ-ausgabe" name="typ" value="Ausgabe" checked>
@@ -82,24 +86,46 @@
                         Investiertes Geld ist weder ausgegeben noch frei verfügbar. „Geld zurück“ (z. B. Aktien verkauft) verringert es wieder.
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <label for="betrag">Betrag (€)</label>
-                    <input type="text" id="betrag" name="betrag" placeholder="z. B. 49,99" inputmode="decimal" required enterkeyhint="next">
+                    <label for="betrag">Betrag</label>
+                    <div class="betrag-feld">
+                        <input type="text" id="betrag" name="betrag" placeholder="0,00" inputmode="decimal" required enterkeyhint="done" autocomplete="off">
+                        <span class="betrag-euro" aria-hidden="true">€</span>
+                    </div>
                     <span class="feld-fehler" data-fehler="betrag" hidden></span>
                 </div>
+
                 <div class="form-row">
-                    <label for="kategorie">Kategorie <span class="optional">(optional)</span></label>
-                    <input type="text" id="kategorie" name="kategorie" list="kategorien-liste" placeholder="z. B. Lebensmittel" enterkeyhint="next">
-                    <datalist id="kategorien-liste"></datalist>
+                    <span class="feld-label" id="kategorie-label">Kategorie</span>
+                    <input type="hidden" id="kategorie" name="kategorie">
+                    <div class="chips" role="group" aria-labelledby="kategorie-label" data-kat-chips></div>
+                    <div class="gruppe-info" data-gruppe-info hidden></div>
+                    <div class="gruppe-zeile" data-gruppe-zeile hidden>
+                        <label for="gruppe">Kategoriegruppe <span class="optional">(optional)</span></label>
+                        <input type="text" id="gruppe" name="gruppe" list="gruppen-liste" placeholder="z. B. Alltag" enterkeyhint="done">
+                        <datalist id="gruppen-liste"></datalist>
+                    </div>
                 </div>
+
                 <div class="form-row">
-                    <label for="gruppe">Kategoriegruppe <span class="optional">(optional)</span></label>
-                    <input type="text" id="gruppe" name="gruppe" list="gruppen-liste" placeholder="z. B. Alltag" enterkeyhint="done">
-                    <datalist id="gruppen-liste"></datalist>
-                    <span class="feld-hinweis" data-gruppe-hinweis>
-                        Gehört die Kategorie in der WebApp schon zu einer Gruppe, gilt beim Einlesen diese.
-                    </span>
+                    <label for="beschreibung">Name <span class="optional">(optional)</span></label>
+                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf" enterkeyhint="done">
                 </div>
+
+                <div class="form-row">
+                    <span class="feld-label" id="datum-label">Datum</span>
+                    <div class="chips" role="group" aria-labelledby="datum-label">
+                        <button type="button" class="chip" data-datum-wahl="heute">heute</button>
+                        <button type="button" class="chip" data-datum-wahl="gestern">gestern</button>
+                        <button type="button" class="chip" data-datum-wahl="anderes">anderes Datum …</button>
+                    </div>
+                    <div class="datum-zeile" data-datum-zeile hidden>
+                        <input type="date" id="datum" name="datum" required aria-labelledby="datum-label">
+                    </div>
+                    <span class="feld-fehler" data-fehler="datum" hidden></span>
+                </div>
+
                 <div class="form-row">
                     <span class="feld-label" id="steuer-label">Steuerrelevant</span>
                     <input type="checkbox" id="steuerrelevant" name="steuerrelevant" value="ja" class="schalter-feld" aria-labelledby="steuer-label">
@@ -119,6 +145,7 @@
 
     <!-- ============================================================ Liste -->
     <section data-ansicht="liste" hidden aria-labelledby="liste-titel">
+        <div class="erinnerung" data-erinnerung="liste" hidden></div>
         <div class="kennzahlen handy-zahlen" data-kennzahlen></div>
         <div class="card">
             <div class="karten-kopf">
@@ -137,6 +164,7 @@
 
     <!-- ============================================================ Export -->
     <section data-ansicht="export" hidden aria-labelledby="export-titel">
+        <div class="erinnerung" data-erinnerung="export" hidden></div>
         <div class="card">
             <h2 id="export-titel">Excel exportieren</h2>
             <p class="export-text" data-export-text></p>
@@ -154,22 +182,63 @@
         </div>
 
         <div class="card">
-            <h2>So kommt die Datei in die WebApp</h2>
+            <h2>So kommt die Datei in die Finanz-App</h2>
             <ol class="schritt-liste">
                 <li>Die Excel-Datei auf den PC bringen – z. B. per Mail an dich selbst, über eine Cloud oder per Kabel.</li>
-                <li>Die Finanz-App am PC öffnen und oben im Menü auf <strong>„Komplex“</strong> stellen.</li>
-                <li><strong>„Eintragen“</strong> → <strong>„Mehrere Einträge aus einer Excel-Datei“</strong> aufklappen.</li>
+                <li>Die Finanz-App am PC öffnen und auf <strong>„Eintragen“</strong> gehen (im einfachen Modus <strong>„Überblick &amp; Eintragen“</strong>).</li>
+                <li><strong>„Mehrere Einträge aus einer Excel-Datei“</strong> aufklappen.</li>
                 <li>Die Datei bei „Hochladen“ hineinziehen oder auswählen → <strong>„Hochladen und einpflegen“</strong>.</li>
             </ol>
-            <p class="hinweis">Liest du dieselbe Datei aus Versehen zweimal ein, zeigt die WebApp die Einträge als „mögliche Dublette“ an und pflegt sie nicht ungefragt ein.</p>
+            <p class="hinweis">Liest du dieselbe Datei aus Versehen zweimal ein, zeigt die Finanz-App die Einträge als „mögliche Dublette“ an und pflegt sie nicht ungefragt ein.</p>
         </div>
     </section>
 
-    <!-- ============================================================ Hilfe -->
-    <section data-ansicht="hilfe" hidden aria-labelledby="hilfe-titel">
-        <h1 id="hilfe-titel" class="handy-h1">Anleitung</h1>
+    <!-- ============================================================ Mehr -->
+    <section data-ansicht="mehr" hidden aria-labelledby="mehr-titel">
+        <h1 id="mehr-titel" class="handy-h1">Mehr</h1>
 
-        <details class="hilfe-thema" open>
+        <div class="card">
+            <h2>Kategorien vom PC</h2>
+            <p class="hinweis kein-abstand-oben" data-pc-stand></p>
+            <a class="btn-knopf breit" href="#scan">QR-Code am PC scannen</a>
+            <p class="feld-hinweis">Am PC: unten rechts „Handy-App“ → Reiter „Kategorien aufs Handy“. Geht ohne Internet.</p>
+        </div>
+
+        <div class="card">
+            <h2>Aussehen</h2>
+            <span class="feld-label">Modus</span>
+            <div class="wahl-schalter" role="radiogroup" aria-label="Modus" data-aussehen-feld="modus">
+                <input type="radio" id="modus-dunkel" name="a-modus" value="dunkel"><label for="modus-dunkel">Dunkel</label>
+                <input type="radio" id="modus-hell" name="a-modus" value="hell"><label for="modus-hell">Hell</label>
+            </div>
+            <span class="feld-label abstand-oben">Farbschema</span>
+            <div class="schema-reihe" role="radiogroup" aria-label="Farbschema" data-schemata></div>
+            <span class="feld-label abstand-oben">Zahlenfarben</span>
+            <div class="wahl-schalter" role="radiogroup" aria-label="Zahlenfarben" data-aussehen-feld="zahlen">
+                <input type="radio" id="zahlen-klassisch" name="a-zahlen" value="klassisch"><label for="zahlen-klassisch">Grün / Rot</label>
+                <input type="radio" id="zahlen-bo" name="a-zahlen" value="blau_orange"><label for="zahlen-bo">Blau / Orange</label>
+            </div>
+            <p class="feld-hinweis">Beim Scannen kann das Aussehen vom PC gleich mit übernommen werden.</p>
+        </div>
+
+        <div class="card">
+            <h2>Erinnerung</h2>
+            <div class="einstellungs-zeile">
+                <label for="erinnerung-tage">Orange erinnern, wenn Einträge so lange nicht am PC sind</label>
+                <select id="erinnerung-tage" data-erinnerung-tage>
+                    <option value="7">nach 7 Tagen</option>
+                    <option value="14">nach 14 Tagen</option>
+                    <option value="21">nach 21 Tagen</option>
+                    <option value="30">nach 30 Tagen</option>
+                    <option value="0">nie</option>
+                </select>
+            </div>
+            <p class="feld-hinweis">Der Hinweis erscheint beim Öffnen der App – ganz ohne Internet. Eine Benachrichtigung bei geschlossener App gibt es bewusst nicht.</p>
+        </div>
+
+        <h2 class="handy-h2">Anleitung</h2>
+
+        <details class="hilfe-thema">
             <summary><span class="hilfe-thema-titel">Wofür ist diese App?</span></summary>
             <div class="hilfe-inhalt">
                 <p>Unterwegs schnell Einnahmen, Ausgaben und Investments notieren. Später exportierst du alles als Excel-Datei
@@ -183,13 +252,30 @@
             <div class="hilfe-inhalt">
                 <ol>
                     <li>Unten auf <strong>„Neu“</strong> tippen.</li>
-                    <li>Datum steht schon auf heute. Art wählen: Einnahme, Ausgabe oder Investment
-                        (bei Investment zusätzlich „Geld angelegt“ oder „Geld zurück“).</li>
-                    <li>Betrag eintippen, z. B. <code>49,99</code>. Name, Kategorie und Gruppe sind freiwillig.</li>
+                    <li>Art wählen: Einnahme, Ausgabe oder Investment (bei Investment zusätzlich „Geld angelegt“ oder „Geld zurück“).</li>
+                    <li>Betrag eintippen, z. B. <code>12,80</code>.</li>
+                    <li>Kategorie antippen – oben stehen die 5 zuletzt benutzten. Alle anderen (nach Gruppen sortiert, mit Suche)
+                        unter <strong>„Alle Kategorien …“</strong>; dort kannst du auch eine neue eintippen.</li>
+                    <li>Name (freiwillig), Datum: „heute“, „gestern“ oder „anderes Datum …“.</li>
                     <li><strong>„Hinzufügen“</strong> – fertig.</li>
                 </ol>
-                <p class="hilfe-tipp">💡 Kategorien und Gruppen, die du schon einmal benutzt hast, werden beim Tippen vorgeschlagen.
-                    Hast du zu einer Kategorie früher eine Gruppe angegeben, wird sie automatisch eingetragen.</p>
+                <p class="hilfe-tipp">💡 Kommt die Kategorie vom PC, steht die Kategoriegruppe schon fest – genau wie am PC. Bei einer
+                    neuen Kategorie kannst du eine Gruppe angeben.</p>
+            </div>
+        </details>
+
+        <details class="hilfe-thema">
+            <summary><span class="hilfe-thema-titel">Kategorien vom PC übernehmen</span></summary>
+            <div class="hilfe-inhalt">
+                <ol>
+                    <li>Am PC die Finanz-App öffnen, unten rechts auf <strong>„Handy-App“</strong> klicken und den Reiter
+                        <strong>„Kategorien aufs Handy“</strong> wählen.</li>
+                    <li>Hier unter <strong>„Mehr“</strong> auf <strong>„QR-Code am PC scannen“</strong> tippen und die Kamera auf den Code halten.
+                        Beim ersten Mal fragt das Handy, ob die App die Kamera benutzen darf.</li>
+                    <li>Sind es mehrere Codes, am PC nach jedem Code auf <strong>„Weiter“</strong> klicken. Die Reihenfolge ist egal.</li>
+                </ol>
+                <p class="hilfe-tipp">💡 Das geht ohne Internet, auch im Flugmodus. Neue Kategorien am PC? Einfach noch einmal scannen –
+                    das Handy übernimmt den neuen Stand. Deine Einträge bleiben dabei unverändert.</p>
             </div>
         </details>
 
@@ -203,7 +289,7 @@
         </details>
 
         <details class="hilfe-thema">
-            <summary><span class="hilfe-thema-titel">Exportieren und in die WebApp einlesen</span></summary>
+            <summary><span class="hilfe-thema-titel">Exportieren und in die Finanz-App einlesen</span></summary>
             <div class="hilfe-inhalt">
                 <ol>
                     <li>Unten auf <strong>„Export“</strong> tippen.</li>
@@ -211,8 +297,10 @@
                         <strong>Android:</strong> „Excel herunterladen“ – die Datei liegt dann im Ordner „Downloads“.</li>
                     <li>Die Einträge verschwinden danach von der Liste. Unter „Letzte Exporte“ kannst du die Datei nochmal speichern
                         oder die Einträge zurückholen.</li>
-                    <li>Am PC: Finanz-App im Modus „Komplex“ → „Eintragen“ → „Mehrere Einträge aus einer Excel-Datei“ → Datei hochladen.</li>
+                    <li>Am PC: Finanz-App → „Eintragen“ (im einfachen Modus „Überblick &amp; Eintragen“) → „Mehrere Einträge aus einer Excel-Datei“ → Datei hochladen.</li>
                 </ol>
+                <p class="hilfe-tipp">🔔 Oben steht, wie viele Einträge noch nicht am PC sind. Liegen sie länger als eingestellt
+                    (Standard 14 Tage) auf dem Handy, wird der Hinweis orange.</p>
             </div>
         </details>
 
@@ -232,18 +320,56 @@
             <summary><span class="hilfe-thema-titel">Updates</span></summary>
             <div class="hilfe-inhalt">
                 <p>Gibt es eine neue Version, erscheint beim nächsten Öffnen (mit Internet) oben „Eine neue Version ist da“.
-                    Einmal auf „Jetzt aktualisieren“ tippen – deine Einträge bleiben erhalten.</p>
+                    Einmal auf „Jetzt aktualisieren“ tippen – deine Einträge, Kategorien und Einstellungen bleiben erhalten.</p>
             </div>
         </details>
 
-        <div class="card">
-            <h2>Vorschläge</h2>
+        <div class="card abstand-oben">
+            <h2>Eigene Vorschläge</h2>
             <p class="hinweis" data-vorschlaege-text></p>
             <button type="button" class="btn-knopf btn-grau btn-klein" data-vorschlaege-loeschen>Vorschläge löschen</button>
         </div>
-        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 1 · passt zur Finanz-App ab Version 14</p>
+        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 2 · Kategorien vom PC ab Finanz-App 20<br>QR-Leser: jsQR (Apache-Lizenz 2.0, siehe LIZENZ-jsQR.txt)</p>
+    </section>
+
+    <!-- ============================================================ Scannen -->
+    <section data-ansicht="scan" hidden aria-labelledby="scan-titel">
+        <div class="card" data-scan-karte>
+            <h2 id="scan-titel">Kategorien vom PC übernehmen</h2>
+            <div class="sucher">
+                <video data-scan-video muted playsinline autoplay></video>
+                <div class="sucher-rahmen" aria-hidden="true"></div>
+                <div class="sucher-text" data-scan-text>Kamera wird gestartet …</div>
+            </div>
+            <div class="fortschritt" data-scan-fortschritt hidden></div>
+            <p class="scan-status" data-scan-status>Am PC: „Handy-App“ → „Kategorien aufs Handy“. Dann den Code in den Rahmen halten.</p>
+            <label class="haken-zeile">
+                <input type="checkbox" data-aussehen-uebernehmen checked>
+                <span>Aussehen vom PC übernehmen (Hell/Dunkel, Farbschema, Zahlenfarben)</span>
+            </label>
+            <a class="btn-knopf btn-grau breit" href="#mehr" data-scan-abbrechen>Abbrechen</a>
+        </div>
+        <div class="card" data-scan-ergebnis hidden>
+            <h2 class="ergebnis-titel">✓ Übernommen</h2>
+            <ul class="ergebnis-liste" data-scan-zahlen></ul>
+            <p class="hinweis" data-scan-zusatz></p>
+            <a class="btn-knopf breit" href="#neu">Zum Eintragen</a>
+        </div>
     </section>
 </main>
+
+<!-- Kategorie wählen (von unten hereingeschoben) -->
+<div class="blatt-huelle" data-blatt hidden>
+    <div class="blatt-hintergrund" data-blatt-zu></div>
+    <div class="blatt" role="dialog" aria-modal="true" aria-labelledby="blatt-titel">
+        <div class="blatt-kopf">
+            <h2 id="blatt-titel">Kategorie wählen</h2>
+            <button type="button" class="icon-knopf" data-blatt-zu aria-label="Schließen" title="Schließen">✕</button>
+        </div>
+        <input type="search" class="handy-suche" placeholder="Suchen oder neue Kategorie eintippen" aria-label="Kategorie suchen" data-blatt-suche enterkeyhint="done" autocomplete="off">
+        <div class="blatt-liste" data-blatt-liste></div>
+    </div>
+</div>
 
 <nav class="tab-leiste" aria-label="Bereiche">
     <a href="#neu" class="tab" data-tab="neu">
@@ -259,9 +385,9 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
         <span>Export</span>
     </a>
-    <a href="#hilfe" class="tab" data-tab="hilfe">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg>
-        <span>Hilfe</span>
+    <a href="#mehr" class="tab" data-tab="mehr">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>
+        <span>Mehr</span>
     </a>
 </nav>
 
@@ -270,8 +396,11 @@
     <button type="button" class="toast-knopf" data-toast-aktion hidden></button>
 </div>
 
-<script src="speicher_v001.js"></script>
+<script src="speicher_v002.js"></script>
 <script src="xlsx_v001.js"></script>
-<script src="app_v001.js"></script>
+<script src="inflate_v001.js"></script>
+<script src="jsQR_1.4.0.js"></script>
+<script src="scanner_v001.js"></script>
+<script src="app_v002.js"></script>
 </body>
 </html>
