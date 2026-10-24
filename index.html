@@ -15,9 +15,9 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Version 3: Optik und Farben wie die Finanz-App am PC (Version 19-21), dazu das Handy-Gerüst -->
+    <!-- Version 4: Name ist Pflicht (wie Finanz-App 28). Version 3: Optik und Farben wie die Finanz-App am PC -->
     <link rel="stylesheet" href="webapp_v019.css">
-    <link rel="stylesheet" href="handy_v003.css">
+    <link rel="stylesheet" href="handy_v004.css">
     <!-- setzt das gewählte Aussehen sofort (Hell/Dunkel, Farbschema, Zahlenfarben) -->
     <script src="farben_v001.js"></script>
 </head>
@@ -114,8 +114,9 @@
                 </div>
 
                 <div class="form-row">
-                    <label for="beschreibung">Name <span class="optional">(optional)</span></label>
-                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf" enterkeyhint="done">
+                    <label for="beschreibung">Name</label>
+                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf" enterkeyhint="done" required maxlength="200" autocomplete="off">
+                    <span class="feld-fehler" data-fehler="name" hidden></span>
                 </div>
 
                 <div class="form-row">
@@ -262,7 +263,7 @@
                     <li>Kategorie: eine der 5 zuletzt benutzten antippen – oder ins Feld tippen. Beim Tippen erscheinen darunter die
                         passenden Kategorien; passt keine, wird das Getippte eine <strong>neue Kategorie</strong>. Alle Kategorien nach
                         Gruppen gibt es unter <strong>„Alle Kategorien …“</strong>.</li>
-                    <li>Name (freiwillig), Datum: „heute“, „gestern“ oder „anderes Datum …“.</li>
+                    <li>Name (Pflicht, z. B. „Wocheneinkauf“), Datum: „heute“, „gestern“ oder „anderes Datum …“.</li>
                     <li><strong>„Hinzufügen“</strong> – fertig.</li>
                 </ol>
                 <p class="hilfe-tipp">💡 Kommt die Kategorie vom PC, steht die Kategoriegruppe schon fest – genau wie am PC. Bei einer
@@ -336,7 +337,7 @@
             <p class="hinweis" data-vorschlaege-text></p>
             <button type="button" class="btn-knopf btn-grau btn-klein" data-vorschlaege-loeschen>Vorschläge löschen</button>
         </div>
-        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 3 · Kategorien vom PC ab Finanz-App 20<br>QR-Leser: jsQR (Apache-Lizenz 2.0, siehe LIZENZ-jsQR.txt)</p>
+        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 4 · Name ist Pflicht (wie ab Finanz-App 28) · Kategorien vom PC ab Finanz-App 20<br>QR-Leser: jsQR (Apache-Lizenz 2.0, siehe LIZENZ-jsQR.txt)</p>
     </section>
 
     <!-- ============================================================ Scannen -->
@@ -408,6 +409,6 @@
 <script src="inflate_v001.js"></script>
 <script src="jsQR_1.4.0.js"></script>
 <script src="scanner_v001.js"></script>
-<script src="app_v003.js"></script>
+<script src="app_v004.js"></script>
 </body>
 </html>
