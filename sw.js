@@ -1,5 +1,5 @@
 /*
- * sw.js – Finanzapp Handy (Version 4): macht die App offline nutzbar und liefert Updates.
+ * sw.js – Finanzapp Handy (Version 5): macht die App offline nutzbar und liefert Updates.
  *
  * Alle Programmdateien werden beim ersten Öffnen auf dem Handy zwischengespeichert.
  * Danach startet die App auch ohne Internet. Bei einer neuen Version (VERSION
@@ -9,20 +9,20 @@
  * Die Einträge selbst liegen NICHT hier, sondern im Speicher der App (localStorage)
  * und bleiben bei Updates erhalten.
  */
-var VERSION = "finanzapp-handy-4";
+var VERSION = "finanzapp-handy-5";
 var DATEIEN = [
     "./",
     "index.html",
     "manifest.webmanifest",
     "webapp_v019.css",
-    "handy_v004.css",
+    "handy_v005.css",
     "farben_v001.js",
     "speicher_v002.js",
     "xlsx_v001.js",
     "inflate_v001.js",
     "jsQR_1.4.0.js",
     "scanner_v001.js",
-    "app_v004.js",
+    "app_v005.js",
     "favicon-32.png",
     "apple-touch-icon.png",
     "icon-192.png",

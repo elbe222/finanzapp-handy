@@ -15,9 +15,9 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Version 4: Name ist Pflicht (wie Finanz-App 28). Version 3: Optik und Farben wie die Finanz-App am PC -->
+    <!-- Version 5: Reihenfolge Name, Kategorie, Kategoriegruppe (eigene Auswahl). Version 4: Name ist Pflicht (wie Finanz-App 28). Version 3: Optik und Farben wie die Finanz-App am PC -->
     <link rel="stylesheet" href="webapp_v019.css">
-    <link rel="stylesheet" href="handy_v004.css">
+    <link rel="stylesheet" href="handy_v005.css">
     <!-- setzt das gewählte Aussehen sofort (Hell/Dunkel, Farbschema, Zahlenfarben) -->
     <script src="farben_v001.js"></script>
 </head>
@@ -97,6 +97,12 @@
                 </div>
 
                 <div class="form-row">
+                    <label for="beschreibung">Name</label>
+                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf" enterkeyhint="done" required maxlength="200" autocomplete="off">
+                    <span class="feld-fehler" data-fehler="name" hidden></span>
+                </div>
+
+                <div class="form-row">
                     <label for="kategorie" id="kategorie-label">Kategorie <span class="optional">(optional)</span></label>
                     <div class="kat-eingabe">
                         <input type="text" id="kategorie" name="kategorie" placeholder="Neue Kategorie eintippen …" autocomplete="off"
@@ -105,18 +111,18 @@
                     </div>
                     <div class="kat-unter" data-kat-unter hidden></div>
                     <div class="chips" role="group" aria-labelledby="kategorie-label" data-kat-chips></div>
-                    <div class="gruppe-info" data-gruppe-info hidden></div>
-                    <div class="gruppe-zeile" data-gruppe-zeile hidden>
-                        <label for="gruppe">Kategoriegruppe <span class="optional">(optional)</span></label>
-                        <input type="text" id="gruppe" name="gruppe" list="gruppen-liste" placeholder="z. B. Alltag" enterkeyhint="done">
-                        <datalist id="gruppen-liste"></datalist>
-                    </div>
+                    <div class="gruppe-info" data-kat-info hidden></div>
                 </div>
 
-                <div class="form-row">
-                    <label for="beschreibung">Name</label>
-                    <input type="text" id="beschreibung" name="beschreibung" placeholder="z. B. Wocheneinkauf" enterkeyhint="done" required maxlength="200" autocomplete="off">
-                    <span class="feld-fehler" data-fehler="name" hidden></span>
+                <div class="form-row" data-gruppe-feld>
+                    <label for="gruppe" id="gruppe-label">Kategoriegruppe <span class="optional">(optional)</span></label>
+                    <div class="kat-eingabe">
+                        <input type="text" id="gruppe" name="gruppe" placeholder="z. B. Alltag" autocomplete="off"
+                               autocapitalize="sentences" spellcheck="false" enterkeyhint="done" maxlength="80">
+                        <button type="button" class="kat-leeren" data-gruppe-leeren hidden aria-label="Kategoriegruppe leeren" title="Leeren">✕</button>
+                    </div>
+                    <div class="gruppe-info" data-gruppe-info hidden></div>
+                    <div class="chips" role="group" aria-labelledby="gruppe-label" data-gruppe-chips></div>
                 </div>
 
                 <div class="form-row">
@@ -260,14 +266,17 @@
                     <li>Unten auf <strong>„Neu“</strong> tippen.</li>
                     <li>Art wählen: Einnahme, Ausgabe oder Investment (bei Investment zusätzlich „Geld angelegt“ oder „Geld zurück“).</li>
                     <li>Betrag eintippen, z. B. <code>12,80</code>.</li>
-                    <li>Kategorie: eine der 5 zuletzt benutzten antippen – oder ins Feld tippen. Beim Tippen erscheinen darunter die
+                    <li><strong>Name</strong> (Pflicht, z. B. „Wocheneinkauf“).</li>
+                    <li>Kategorie (freiwillig): eine der 5 zuletzt benutzten antippen – oder ins Feld tippen. Beim Tippen erscheinen darunter die
                         passenden Kategorien; passt keine, wird das Getippte eine <strong>neue Kategorie</strong>. Alle Kategorien nach
                         Gruppen gibt es unter <strong>„Alle Kategorien …“</strong>.</li>
-                    <li>Name (Pflicht, z. B. „Wocheneinkauf“), Datum: „heute“, „gestern“ oder „anderes Datum …“.</li>
+                    <li>Kategoriegruppe (freiwillig): eine Gruppe antippen oder eintippen – geht auch ohne Kategorie.</li>
+                    <li>Datum: „heute“, „gestern“ oder „anderes Datum …“; bei Bedarf „Steuerrelevant“ einschalten.</li>
                     <li><strong>„Hinzufügen“</strong> – fertig.</li>
                 </ol>
-                <p class="hilfe-tipp">💡 Kommt die Kategorie vom PC, steht die Kategoriegruppe schon fest – genau wie am PC. Bei einer
-                    neuen Kategorie kannst du eine Gruppe angeben.</p>
+                <p class="hilfe-tipp">💡 Hat eine Kategorie vom PC dort schon eine Kategoriegruppe, steht diese fest – genau wie am PC.
+                    Sonst wählst du frei; beim Einlesen am PC wird die Gruppe der Kategorie zugeordnet. Ohne Kategorie liegt der
+                    Eintrag am PC direkt in der Gruppe.</p>
             </div>
         </details>
 
@@ -337,7 +346,7 @@
             <p class="hinweis" data-vorschlaege-text></p>
             <button type="button" class="btn-knopf btn-grau btn-klein" data-vorschlaege-loeschen>Vorschläge löschen</button>
         </div>
-        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 4 · Name ist Pflicht (wie ab Finanz-App 28) · Kategorien vom PC ab Finanz-App 20<br>QR-Leser: jsQR (Apache-Lizenz 2.0, siehe LIZENZ-jsQR.txt)</p>
+        <p class="hinweis handy-fusszeile">Finanzapp Handy · Version 5 · Name ist Pflicht (wie ab Finanz-App 28) · Kategorien vom PC ab Finanz-App 20<br>QR-Leser: jsQR (Apache-Lizenz 2.0, siehe LIZENZ-jsQR.txt)</p>
     </section>
 
     <!-- ============================================================ Scannen -->
@@ -409,6 +418,6 @@
 <script src="inflate_v001.js"></script>
 <script src="jsQR_1.4.0.js"></script>
 <script src="scanner_v001.js"></script>
-<script src="app_v004.js"></script>
+<script src="app_v005.js"></script>
 </body>
 </html>
